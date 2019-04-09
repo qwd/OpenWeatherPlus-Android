@@ -1,4 +1,4 @@
-package com.heweather.owp.DataInterface;
+package com.heweather.owp.dataInterface;
 
 public class DataUtil {
     private static DataInterface dataInterface;

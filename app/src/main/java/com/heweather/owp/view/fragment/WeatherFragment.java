@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.heweather.owp.DataInterface.DataUtil;
+import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.MyApplication;
 import com.heweather.owp.R;
 import com.heweather.owp.presenters.WeatherInterface;
@@ -26,10 +26,10 @@ import com.heweather.owp.presenters.impl.WeatherImpl;
 import com.heweather.owp.utils.ContentUtil;
 import com.heweather.owp.utils.IconUtils;
 import com.heweather.owp.utils.TransUnitUtil;
-import com.heweather.owp.view.horizonView.HourlyForecastView;
-import com.heweather.owp.view.horizonView.IndexHorizontalScrollView;
-import com.heweather.owp.view.horizonView.ScrollWatched;
-import com.heweather.owp.view.horizonView.ScrollWatcher;
+import com.heweather.owp.view.horizonview.HourlyForecastView;
+import com.heweather.owp.view.horizonview.IndexHorizontalScrollView;
+import com.heweather.owp.view.horizonview.ScrollWatched;
+import com.heweather.owp.view.horizonview.ScrollWatcher;
 import com.heweather.owp.view.skyview.SunView;
 
 import org.joda.time.DateTime;

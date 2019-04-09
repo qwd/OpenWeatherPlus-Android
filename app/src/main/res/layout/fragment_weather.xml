@@ -117,17 +117,17 @@
                                 android:layout_marginLeft="50dp"
                                 android:orientation="horizontal">
 
-                                <com.heweather.owp.view.horizonView.IndexHorizontalScrollView
+                                <com.heweather.owp.view.horizonview.IndexHorizontalScrollView
                                     android:id="@+id/hsv"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
 
-                                    <com.heweather.owp.view.horizonView.HourlyForecastView
+                                    <com.heweather.owp.view.horizonview.HourlyForecastView
                                         android:id="@+id/hourly"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content" />
 
-                                </com.heweather.owp.view.horizonView.IndexHorizontalScrollView>
+                                </com.heweather.owp.view.horizonview.IndexHorizontalScrollView>
 
                             </LinearLayout>
                         </RelativeLayout>

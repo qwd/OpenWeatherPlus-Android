@@ -1,4 +1,4 @@
-package com.heweather.owp.DataInterface;
+package com.heweather.owp.dataInterface;
 
 public interface DataInterface {
     void setCid(String cid);

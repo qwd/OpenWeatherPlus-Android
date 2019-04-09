@@ -1,4 +1,4 @@
-package com.heweather.owp.view.horizonView;
+package com.heweather.owp.view.horizonview;
 
 import android.content.Context;
 import android.graphics.Canvas;

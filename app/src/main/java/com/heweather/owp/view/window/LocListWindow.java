@@ -1,4 +1,4 @@
-package com.heweather.owp.view.popupWindow;
+package com.heweather.owp.view.window;
 
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;

@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.heweather.owp.DataInterface.DataUtil;
+import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.R;
 import com.heweather.owp.bean.CityBean;
 import com.heweather.owp.bean.CityBeanList;
 import com.heweather.owp.utils.SpUtils;
 import com.heweather.owp.view.activity.MainActivity;
-import com.heweather.owp.view.popupWindow.LocListWindow;
+import com.heweather.owp.view.window.LocListWindow;
 
 import java.util.ArrayList;
 import java.util.List;

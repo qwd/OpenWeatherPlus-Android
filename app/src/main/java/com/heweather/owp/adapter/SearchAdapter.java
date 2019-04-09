@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.heweather.owp.DataInterface.DataUtil;
+import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.R;
 import com.heweather.owp.bean.CityBean;
 import com.heweather.owp.bean.CityBeanList;

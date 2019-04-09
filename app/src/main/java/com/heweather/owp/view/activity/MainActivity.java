@@ -23,8 +23,8 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.heweather.owp.DataInterface.DataInterface;
-import com.heweather.owp.DataInterface.DataUtil;
+import com.heweather.owp.dataInterface.DataInterface;
+import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.R;
 import com.heweather.owp.adapter.ViewPagerAdapter;
 import com.heweather.owp.bean.CityBean;
@@ -34,7 +34,7 @@ import com.heweather.owp.utils.DisplayUtil;
 import com.heweather.owp.utils.IconUtils;
 import com.heweather.owp.utils.SpUtils;
 import com.heweather.owp.view.fragment.WeatherFragment;
-import com.heweather.owp.view.popupWindow.LocListWindow;
+import com.heweather.owp.view.window.LocListWindow;
 
 import org.joda.time.DateTime;
 

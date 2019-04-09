@@ -1,4 +1,4 @@
-package com.heweather.owp.view.horizonView;
+package com.heweather.owp.view.horizonview;
 
 /**
  * Created by dongua on 17-9-11.
