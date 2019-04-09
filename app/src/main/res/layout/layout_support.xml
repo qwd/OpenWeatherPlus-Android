@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/color_F5F5F5">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:src="@mipmap/icon_logo" />
+
+    <TextView
+        android:gravity="center_vertical"
+        android:textSize="12sp"
+        android:textColor="@color/color_212121"
+        android:text="开源APP"
+        android:layout_marginStart="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+
+    <TextView
+        android:gravity="center_vertical"
+        android:textSize="10sp"
+        android:textColor="@color/color_7A7A7A"
+        android:text="技术支持 和风科技"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+
+</RelativeLayout>

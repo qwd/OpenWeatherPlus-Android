@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_layout"
+    android:layout_width="match_parent"
+    android:background="@color/back_white"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.WeatherFragment">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-54dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/back_100d" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="650dp"
+                    android:layout_below="@+id/iv_back"
+                    android:layout_marginTop="-90dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/back" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp">
+
+                        <TextView
+                            android:id="@+id/tv_today_tmp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="154dp"
+                            android:text="20°"
+                            android:textColor="@color/white"
+                            android:textSize="60sp" />
+
+                        <TextView
+                            android:id="@+id/tv_today_cond"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_today_tmp"
+                            android:layout_centerHorizontal="true"
+                            android:text="多云"
+                            android:textColor="@color/white80"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_forecast_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="50dp"
+                            android:paddingBottom="16dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="13dp"
+                            android:text="@string/forecast"
+                            android:textColor="@color/color_212121"
+                            android:textSize="16sp"
+                            tools:ignore="RtlSymmetry" />
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:id="@+id/tv_line_max_tmp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="16dp"
+                                android:text="21°"
+                                android:textColor="@color/color_ababab"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_line_min_tmp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="66dp"
+                                android:text="11°"
+                                android:textColor="@color/color_ababab"
+                                android:textSize="16sp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="98dp"
+                                android:layout_marginLeft="50dp"
+                                android:orientation="horizontal">
+
+                                <com.heweather.owp.view.horizonview.IndexHorizontalScrollView
+                                    android:id="@+id/hsv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.heweather.owp.view.horizonview.HourlyForecastView
+                                        android:id="@+id/hourly"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+
+                                </com.heweather.owp.view.horizonview.IndexHorizontalScrollView>
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <include
+                            android:id="@+id/five_forecast"
+                            layout="@layout/layout_five_forecast"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <include
+                            android:id="@+id/today_detail"
+                            layout="@layout/layout_today_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/back_white" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

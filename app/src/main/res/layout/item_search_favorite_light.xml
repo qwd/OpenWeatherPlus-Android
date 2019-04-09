@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+
+    <TextView
+        android:id="@+id/tv_item_favorite_city"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="5dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:background="@drawable/shape_search_favorite_light"
+        android:gravity="center"
+        android:text="北京市"
+        android:textColor="@color/search_light_color"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>
