@@ -56,7 +56,7 @@ dependencies {
     implementation 'joda-time:joda-time:2.10'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.zhy:okhttputils:2.6.2'
-    implementation files('libs/HeWeather_sdk.jar')
+    implementation files('libs/sdk_HeWeather_Public_Android_V2.4.jar')
     implementation files('libs/android-logging-log4j-1.0.3.jar')
     implementation files('libs/log4j-1.2.17.jar')
     implementation 'com.google.code.gson:gson:2.8.0'
