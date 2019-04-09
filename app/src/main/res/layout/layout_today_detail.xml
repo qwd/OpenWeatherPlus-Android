@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/back_white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_today_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="13dp"
+        android:text="@string/today_title"
+        android:textColor="@color/color_212121"
+        android:textSize="16sp"
+        tools:ignore="RtlSymmetry" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_today_day"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="35dp" />
+
+            <TextView
+                android:id="@+id/tv_max"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/iv_today_day"
+                android:gravity="center"
+                android:text="@string/max_tmp"
+                android:textColor="@color/color_a4a4a4"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_max_tmp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/tv_max"
+                android:gravity="center"
+                android:text="21°"
+                android:textColor="@color/color_4a4a4a"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_today_night"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="30dp" />
+
+            <TextView
+                android:id="@+id/tv_min"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/iv_today_night"
+                android:gravity="center"
+                android:text="@string/min_tmp"
+                android:textColor="@color/color_a4a4a4"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_min_tmp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/tv_min"
+                android:gravity="center"
+                android:text="5°"
+                android:textColor="@color/color_4a4a4a"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="24dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_today_rain"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="35dp"
+                android:src="@mipmap/icon_rainfall" />
+
+            <TextView
+                android:id="@+id/tv_rain"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/iv_today_rain"
+                android:gravity="center"
+                android:text="@string/rainfall"
+                android:textColor="@color/color_a4a4a4"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_today_rain"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/tv_rain"
+                android:gravity="center"
+                android:text="0.5mm"
+                android:textColor="@color/color_4a4a4a"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_today_hum"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="30dp"
+                android:src="@mipmap/icon_hum" />
+
+            <TextView
+                android:id="@+id/tv_hum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/iv_today_hum"
+                android:gravity="center"
+                android:text="@string/hum"
+                android:textColor="@color/color_a4a4a4"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_today_hum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/tv_hum"
+                android:gravity="center"
+                android:text="20%"
+                android:textColor="@color/color_4a4a4a"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="24dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_today_pressure"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="35dp"
+                android:src="@mipmap/icon_pressure" />
+
+            <TextView
+                android:id="@+id/tv_pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/iv_today_pressure"
+                android:gravity="center"
+                android:text="@string/pressure"
+                android:textColor="@color/color_a4a4a4"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_today_pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/tv_pressure"
+                android:gravity="center"
+                android:text="1001HPA"
+                android:textColor="@color/color_4a4a4a"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_today_visible"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="30dp"
+                android:src="@mipmap/icon_visible" />
+
+            <TextView
+                android:id="@+id/tv_visible"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/iv_today_visible"
+                android:gravity="center"
+                android:text="@string/visible"
+                android:textColor="@color/color_a4a4a4"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_today_visible"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/tv_visible"
+                android:gravity="center"
+                android:text="14KM"
+                android:textColor="@color/color_4a4a4a"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="24dp">
+
+        <ImageView
+            android:id="@+id/iv_today_wind"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="35dp"
+            android:src="@mipmap/icon_wind" />
+
+        <TextView
+            android:id="@+id/tv_wind_dir"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/iv_today_wind"
+            android:gravity="center"
+            android:text="东北风"
+            android:textColor="@color/color_a4a4a4"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_wind_sc"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/tv_wind_dir"
+            android:gravity="center"
+            android:text="2级"
+            android:textColor="@color/color_4a4a4a"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/color_ececec" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/air_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/air_quality"
+            android:textColor="@color/color_4a4a4a"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:id="@+id/rv_air"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/air_title"
+            android:background="@drawable/shape_aqi_title">
+
+            <TextView
+                android:id="@+id/tv_air_num"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="8dp"
+                android:text="84"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/tv_air"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/tv_air_num"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:text="良"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:ignore="RtlSymmetry" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <GridLayout
+        android:id="@+id/grid_air"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:columnCount="1"
+        android:rowCount="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_pm25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:gravity="center"
+                    android:text="@string/pm2_5"
+                    android:textColor="@color/color_a4a4a4"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_pm25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/tv_pm25"
+                    android:gravity="center"
+                    android:text="122"
+                    android:textColor="@color/color_4a4a4a"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_pm10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:gravity="center"
+                    android:text="@string/pm10"
+                    android:textColor="@color/color_a4a4a4"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_pm10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/tv_pm10"
+                    android:gravity="center"
+                    android:text="90"
+                    android:textColor="@color/color_4a4a4a"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_so2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:gravity="center"
+                    android:text="@string/so2"
+                    android:textColor="@color/color_a4a4a4"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_so2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/tv_so2"
+                    android:gravity="center"
+                    android:text="12"
+                    android:textColor="@color/color_4a4a4a"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_no2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:gravity="center"
+                    android:text="@string/no2"
+                    android:textColor="@color/color_a4a4a4"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_no2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/tv_no2"
+                    android:gravity="center"
+                    android:text="122"
+                    android:textColor="@color/color_4a4a4a"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_co"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:gravity="center"
+                    android:text="@string/co"
+                    android:textColor="@color/color_a4a4a4"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_co"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/tv_co"
+                    android:gravity="center"
+                    android:text="90"
+                    android:textColor="@color/color_4a4a4a"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_o3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:gravity="center"
+                    android:text="@string/o3"
+                    android:textColor="@color/color_a4a4a4"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_o3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@id/tv_o3"
+                    android:gravity="center"
+                    android:text="12"
+                    android:textColor="@color/color_4a4a4a"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+
+    </GridLayout>
+
+    <ImageView
+        android:id="@+id/iv_line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/color_ececec" />
+
+    <TextView
+        android:id="@+id/tv_sun_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/sun_moon"
+        android:textColor="@color/color_4a4a4a"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <com.heweather.owp.view.skyview.SunView
+            android:id="@+id/sun_view"
+            android:layout_width="0dp"
+            android:layout_height="260dp"
+            android:layout_weight="1"
+            app:sun_circle_color="@color/sun_light_circle"
+            app:sun_circle_radius="70"
+            app:sun_font_color="@color/color_a4a4a4"
+            app:sun_font_size="12px" />
+
+        <com.heweather.owp.view.skyview.SunView
+            android:id="@+id/moon_view"
+            android:layout_width="0dp"
+            android:layout_height="260dp"
+            android:layout_weight="1"
+            app:sun_circle_color="@color/moon_light_circle"
+            app:sun_circle_radius="70"
+            app:sun_font_color="@color/color_a4a4a4"
+            app:sun_font_size="12px"
+            app:type="false" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/back_white"
+        android:gravity="center_vertical|end"
+        android:paddingEnd="15dp"
+        android:text="@string/powered"
+        android:textColor="@color/color_7A7A7A"
+        android:textSize="10sp"
+        tools:ignore="RtlSymmetry" />
+
+
+</merge>
