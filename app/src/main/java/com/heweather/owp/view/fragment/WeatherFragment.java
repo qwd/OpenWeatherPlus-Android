@@ -1,7 +1,9 @@
 package com.heweather.owp.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -298,6 +300,13 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         textViewList.add(tvLineMin);
         tvLineMax = view.findViewById(R.id.tv_line_max_tmp);
         textViewList.add(tvLineMax);
+        TextView tvFrom = view.findViewById(R.id.tv_from);
+        tvFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startUri();
+            }
+        });
 
         tvSunTitle = view.findViewById(R.id.tv_sun_title);
         textViewList.add(tvSunTitle);
@@ -825,5 +834,11 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
             moonView.setTimes(moonRise, moonSet, currentTime);
             hasAni = true;
         }
+    }
+
+    private void startUri(){
+        Uri uri = Uri.parse("https://www.heweather.com");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 }

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'walle'
 
 android {
     compileSdkVersion 28
@@ -10,15 +11,24 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
+    signingConfigs {
+        he {
+            keyAlias "heweather"
+            keyPassword "He123qwe."
+            storeFile rootProject.file("he.jks")
+            storePassword "He123qwe."
+        }
+    }
     buildTypes {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.he
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.he
         }
     }
     allprojects {
@@ -43,6 +53,23 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+}
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+//生成渠道包 ./gradlew clean assembleReleaseChannels
+//支持 productFlavors ./gradlew clean assembleMeituanReleaseChannels
+//生成单个渠道包 ./gradlew clean assembleReleaseChannels -PchannelList=google
+//生成多个渠道包 ./gradlew clean assembleReleaseChannels -PchannelList=google,dianping
+walle {
+    // 指定渠道包的输出路径
+    apkOutputFolder = new File("${project.buildDir}/channels")
+    // 定制渠道包的APK的文件名称
+    apkFileNameFormat = '${appName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}.apk'
+    // 渠道配置文件
+    channelFile = new File("${project.getProjectDir()}/channel")
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
