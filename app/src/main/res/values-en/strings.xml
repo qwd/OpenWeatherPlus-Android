@@ -65,4 +65,6 @@
     <string name="Cape_Town">Cape Town</string>
     <string name="Bangkok">Bangkok</string>
     <string name="Madrid">Madrid</string>
+    <string name="powered">Powered By heweather.com</string>
+
 </resources>

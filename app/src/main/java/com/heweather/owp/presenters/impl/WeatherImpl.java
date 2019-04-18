@@ -6,29 +6,20 @@ import android.util.Log;
 
 import com.heweather.owp.presenters.WeatherInterface;
 import com.heweather.owp.presenters.WeatherPresenters;
-import com.heweather.owp.utils.AppNetConfig;
 import com.heweather.owp.utils.ContentUtil;
 import com.heweather.owp.utils.SpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.List;
 
 import interfaces.heweather.com.interfacesmodule.bean.Lang;
 import interfaces.heweather.com.interfacesmodule.bean.Unit;
-import interfaces.heweather.com.interfacesmodule.bean.air.forecast.AirForecast;
 import interfaces.heweather.com.interfacesmodule.bean.air.now.AirNow;
 import interfaces.heweather.com.interfacesmodule.bean.alarm.Alarm;
 import interfaces.heweather.com.interfacesmodule.bean.search.Search;
-import interfaces.heweather.com.interfacesmodule.bean.weather.Weather;
 import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.Forecast;
 import interfaces.heweather.com.interfacesmodule.bean.weather.hourly.Hourly;
 import interfaces.heweather.com.interfacesmodule.bean.weather.now.Now;
 import interfaces.heweather.com.interfacesmodule.view.HeWeather;
-import okhttp3.Call;
 
 /**
  * Created by niuchong on 2018/5/17.
@@ -100,8 +91,7 @@ public class WeatherImpl implements WeatherPresenters {
             @Override
             public void onError(Throwable throwable) {
                 weatherInterface.getAlarm(null);
-                SpUtils.saveBean(context, "alarm", null);
-                Log.i("sky", "getAlarm onError: ");
+                Log.i("sky", "getAlarm onError: " + throwable);
             }
 
             @Override
@@ -140,7 +130,7 @@ public class WeatherImpl implements WeatherPresenters {
             @Override
             public void onSuccess(Search search) {
                 String parentCity = search.getBasic().get(0).getParent_city();
-                if (TextUtils.isEmpty(parentCity)){
+                if (TextUtils.isEmpty(parentCity)) {
                     parentCity = search.getBasic().get(0).getAdmin_area();
                 }
                 HeWeather.getAirNow(context, parentCity, lang, unit, new HeWeather.OnResultAirNowBeansListener() {
@@ -161,21 +151,21 @@ public class WeatherImpl implements WeatherPresenters {
 
     @Override
     public void getAirForecast(String location) {
-        HeWeather.getAirForecast(context, location, lang, unit, new HeWeather.OnResultAirForecastBeansListener() {
-            @Override
-            public void onError(Throwable throwable) {
-                Log.i(TAG, "getAirForecast onError: ");
-                AirForecast airForecast = SpUtils.getBean(context, "airForecast", AirForecast.class);
-                weatherInterface.getAirForecast(airForecast);
-            }
-
-            @Override
-            public void onSuccess(List<AirForecast> list) {
-                weatherInterface.getAirForecast(list.get(0));
-                SpUtils.saveBean(context, "airForecast", list.get(0));
-
-            }
-        });
+//        HeWeather.getAirForecast(context, location, lang, unit, new HeWeather.OnResultAirForecastBeansListener() {
+//            @Override
+//            public void onError(Throwable throwable) {
+//                Log.i(TAG, "getAirForecast onError: ");
+//                AirForecast airForecast = SpUtils.getBean(context, "airForecast", AirForecast.class);
+//                weatherInterface.getAirForecast(airForecast);
+//            }
+//
+//            @Override
+//            public void onSuccess(List<AirForecast> list) {
+//                weatherInterface.getAirForecast(list.get(0));
+//                SpUtils.saveBean(context, "airForecast", list.get(0));
+//
+//            }
+//        });
     }
 
 

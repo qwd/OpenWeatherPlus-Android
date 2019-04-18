@@ -12,7 +12,7 @@ public class ContentUtil {
     //用户id
     public static final String APK_USERNAME = "和风天气获取的ID";
     //用户key
-    public static final String APK_KEY = "和风天气获取的key";
+    public static final String APK_KEY = "和风天气获取的KEY";
     //当前所在位置
     public static Double NOW_LON = 116.40;
     public static Double NOW_LAT = 39.9;
