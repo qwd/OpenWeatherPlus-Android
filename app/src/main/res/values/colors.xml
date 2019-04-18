@@ -40,6 +40,11 @@
     <color name="aqi_color_light">#B9C0CA</color>
     <color name="color_8E8E93">#8E8E93</color>
 
+    <color name="red_alarm">#c01b09</color>
+    <color name="blue_alarm">#318bf8</color>
+    <color name="yellow_alarm">#d1ca13</color>
+    <color name="orange_alarm">#d76801</color>
+
     <color name="dark_line">#1D2834</color>
     <color name="set_line">#2E3A48</color>
     <color name="light_line">#EDEEF0</color>

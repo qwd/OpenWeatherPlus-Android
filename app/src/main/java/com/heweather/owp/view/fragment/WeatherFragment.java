@@ -1,7 +1,9 @@
 package com.heweather.owp.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,9 +20,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.MyApplication;
 import com.heweather.owp.R;
+import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.presenters.WeatherInterface;
 import com.heweather.owp.presenters.impl.WeatherImpl;
 import com.heweather.owp.utils.ContentUtil;
@@ -42,6 +44,7 @@ import interfaces.heweather.com.interfacesmodule.bean.air.forecast.AirForecast;
 import interfaces.heweather.com.interfacesmodule.bean.air.now.AirNow;
 import interfaces.heweather.com.interfacesmodule.bean.air.now.AirNowCity;
 import interfaces.heweather.com.interfacesmodule.bean.alarm.Alarm;
+import interfaces.heweather.com.interfacesmodule.bean.alarm.AlarmBase;
 import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.Forecast;
 import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.ForecastBase;
 import interfaces.heweather.com.interfacesmodule.bean.weather.hourly.Hourly;
@@ -117,6 +120,7 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
     private GridLayout gridAir;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView tvWeek1;
+    private TextView tvAlarm;
 
     public static WeatherFragment newInstance(String cityId) {
         WeatherFragment fragment = new WeatherFragment();
@@ -298,6 +302,16 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         textViewList.add(tvLineMin);
         tvLineMax = view.findViewById(R.id.tv_line_max_tmp);
         textViewList.add(tvLineMax);
+        tvAlarm = view.findViewById(R.id.tv_today_alarm);
+        textViewList.add(tvAlarm);
+
+        TextView tvFrom = view.findViewById(R.id.tv_from);
+        tvFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startUri();
+            }
+        });
 
         tvSunTitle = view.findViewById(R.id.tv_sun_title);
         textViewList.add(tvSunTitle);
@@ -550,9 +564,51 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void getAlarm(Alarm bean) {
-
+        if (bean != null && bean.getAlarm().size() > 0 && bean.getAlarm().get(0) != null) {
+            tvAlarm.setVisibility(View.VISIBLE);
+            AlarmBase alarmBase = bean.getAlarm().get(0);
+            String level = alarmBase.getLevel();
+            String type = alarmBase.getType();
+            if (ContentUtil.SYS_LANG.equals("en")) {
+                tvAlarm.setText(type);
+            } else {
+                tvAlarm.setText(type + "预警");
+            }
+            if (!TextUtils.isEmpty(level)) {
+                switch (level) {
+                    case "蓝色":
+                    case "Blue":
+                        tvAlarm.setBackground(getResources().getDrawable(R.drawable.shape_blue_alarm));
+                        tvAlarm.setTextColor(getResources().getColor(R.color.white));
+                        break;
+                    case "黄色":
+                    case "Yellow":
+                        tvAlarm.setBackground(getResources().getDrawable(R.drawable.shape_yellow_alarm));
+                        tvAlarm.setTextColor(getResources().getColor(R.color.white));
+                        break;
+                    case "橙色":
+                    case "Orange":
+                        tvAlarm.setBackground(getResources().getDrawable(R.drawable.shape_orange_alarm));
+                        tvAlarm.setTextColor(getResources().getColor(R.color.white));
+                        break;
+                    case "红色":
+                    case "Red":
+                        tvAlarm.setBackground(getResources().getDrawable(R.drawable.shape_red_alarm));
+                        tvAlarm.setTextColor(getResources().getColor(R.color.white));
+                        break;
+                    case "白色":
+                    case "White":
+                        tvAlarm.setBackground(getResources().getDrawable(R.drawable.shape_white_alarm));
+                        tvAlarm.setTextColor(getResources().getColor(R.color.black));
+                        break;
+                }
+            }
+        } else {
+            tvAlarm.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -825,5 +881,11 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
             moonView.setTimes(moonRise, moonSet, currentTime);
             hasAni = true;
         }
+    }
+
+    private void startUri() {
+        Uri uri = Uri.parse("https://www.heweather.com");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 }

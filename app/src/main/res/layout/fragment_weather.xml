@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
-    android:background="@color/back_white"
     android:layout_height="match_parent"
+    android:background="@color/back_white"
     tools:context=".view.fragment.WeatherFragment">
 
     <android.support.v4.widget.NestedScrollView
@@ -65,6 +65,22 @@
                             android:text="多云"
                             android:textColor="@color/white80"
                             android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_today_alarm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_below="@+id/tv_today_cond"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/shape_blue_alarm"
+                            android:gravity="center"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:text="暴雨预警"
+                            android:textColor="@color/white80"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
 
                     </RelativeLayout>
 

@@ -10,9 +10,9 @@ import com.heweather.owp.MyApplication;
 public class ContentUtil {
 
     //用户id
-    public static final String APK_USERNAME = "和风天气获取的ID";
+    public static final String APK_USERNAME = "HE1903211415311839";
     //用户key
-    public static final String APK_KEY = "和风天气获取的key";
+    public static final String APK_KEY = "a7b3fdf76a2b44fc91e36b2afe63d080";
     //当前所在位置
     public static Double NOW_LON = 116.40;
     public static Double NOW_LAT = 39.9;
