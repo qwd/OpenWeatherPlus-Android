@@ -102,7 +102,7 @@ public class SearchAdapter extends Adapter<RecyclerView.ViewHolder> {
                     saveData(Lang.CHINESE_SIMPLIFIED, "cityBean", cid);
                     saveBean("cityBeanEn", cid, i);
                 }
-
+                activity.onBackPressed();
             }
         });
     }
@@ -175,7 +175,6 @@ public class SearchAdapter extends Adapter<RecyclerView.ViewHolder> {
                     cityBeans.setCityBeans(citys);
                     SpUtils.saveBean(activity, key, cityBeans);
                     DataUtil.setCid(cid);
-                    activity.onBackPressed();
                 }
             }
         });
