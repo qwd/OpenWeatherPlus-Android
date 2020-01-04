@@ -148,11 +148,13 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <include
-                            android:id="@+id/five_forecast"
-                            layout="@layout/layout_five_forecast"
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_forecast"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content">
+
+                        </android.support.v7.widget.RecyclerView>
 
                         <include
                             android:id="@+id/today_detail"

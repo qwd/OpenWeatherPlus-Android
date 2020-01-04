@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,11 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.heweather.owp.MyApplication;
 import com.heweather.owp.R;
+import com.heweather.owp.adapter.ForecastAdapter;
 import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.presenters.WeatherInterface;
 import com.heweather.owp.presenters.impl.WeatherImpl;
@@ -55,11 +59,6 @@ import interfaces.heweather.com.interfacesmodule.bean.weather.now.NowBase;
 public class WeatherFragment extends Fragment implements WeatherInterface {
     private static final String PARAM = "LOCATION";
     List<ScrollWatcher> watcherList;
-    private List<TextView> tvWeekList = new ArrayList<>();
-    private List<ImageView> ivDayList = new ArrayList<>();
-    private List<ImageView> ivNightList = new ArrayList<>();
-    private List<TextView> tvMinList = new ArrayList<>();
-    private List<TextView> tvMaxList = new ArrayList<>();
     private List<TextView> textViewList = new ArrayList<>();
     private ImageView ivTodayDay;
     private ImageView ivTodayNight;
@@ -119,8 +118,9 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
     private ImageView ivLine;
     private GridLayout gridAir;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private TextView tvWeek1;
     private TextView tvAlarm;
+    private RecyclerView rvForecast;
+    private ForecastAdapter forecastAdapter;
 
     public static WeatherFragment newInstance(String cityId) {
         WeatherFragment fragment = new WeatherFragment();
@@ -163,11 +163,6 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         float minute = a * 60;
         now = now.plusMinutes(((int) minute));
         currentTime = now.toString("HH:mm");
-        tvWeekList = new ArrayList<>();
-        ivDayList = new ArrayList<>();
-        ivNightList = new ArrayList<>();
-        tvMinList = new ArrayList<>();
-        tvMaxList = new ArrayList<>();
         tvCond = view.findViewById(R.id.tv_today_cond);
         tvTmp = view.findViewById(R.id.tv_today_tmp);
         textViewList.add(tvTmp);
@@ -175,60 +170,7 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         ivLine = view.findViewById(R.id.iv_line2);
         gridAir = view.findViewById(R.id.grid_air);
 
-        tvWeek1 = view.findViewById(R.id.tv_week1);
-        TextView tvWeek2 = view.findViewById(R.id.tv_week2);
-        TextView tvWeek3 = view.findViewById(R.id.tv_week3);
-        TextView tvWeek4 = view.findViewById(R.id.tv_week4);
-        TextView tvWeek5 = view.findViewById(R.id.tv_week5);
-        tvWeekList.add(tvWeek1);
-        tvWeekList.add(tvWeek2);
-        tvWeekList.add(tvWeek3);
-        tvWeekList.add(tvWeek4);
-        tvWeekList.add(tvWeek5);
-        setWeeks(tvWeekList);
-        ImageView iv1Day = view.findViewById(R.id.iv_1_day);
-        ImageView iv2Day = view.findViewById(R.id.iv_2_day);
-        ImageView iv3Day = view.findViewById(R.id.iv_3_day);
-        ImageView iv4Day = view.findViewById(R.id.iv_4_day);
-        ImageView iv5Day = view.findViewById(R.id.iv_5_day);
-        ivDayList.add(iv1Day);
-        ivDayList.add(iv2Day);
-        ivDayList.add(iv3Day);
-        ivDayList.add(iv4Day);
-        ivDayList.add(iv5Day);
-
-        ImageView iv1Night = view.findViewById(R.id.iv_1_night);
-        ImageView iv2Night = view.findViewById(R.id.iv_2_night);
-        ImageView iv3Night = view.findViewById(R.id.iv_3_night);
-        ImageView iv4Night = view.findViewById(R.id.iv_4_night);
-        ImageView iv5Night = view.findViewById(R.id.iv_5_night);
-        ivNightList.add(iv1Night);
-        ivNightList.add(iv2Night);
-        ivNightList.add(iv3Night);
-        ivNightList.add(iv4Night);
-        ivNightList.add(iv5Night);
-
-        TextView tv1MinTemp = view.findViewById(R.id.tv_1_min);
-        TextView tv2MinTemp = view.findViewById(R.id.tv_2_min);
-        TextView tv3MinTemp = view.findViewById(R.id.tv_3_min);
-        TextView tv4MinTemp = view.findViewById(R.id.tv_4_min);
-        TextView tv5MinTemp = view.findViewById(R.id.tv_5_min);
-        tvMinList.add(tv1MinTemp);
-        tvMinList.add(tv2MinTemp);
-        tvMinList.add(tv3MinTemp);
-        tvMinList.add(tv4MinTemp);
-        tvMinList.add(tv5MinTemp);
-
-        TextView tv1MaxTemp = view.findViewById(R.id.tv_1_max);
-        TextView tv2MaxTemp = view.findViewById(R.id.tv_2_max);
-        TextView tv3MaxTemp = view.findViewById(R.id.tv_3_max);
-        TextView tv4MaxTemp = view.findViewById(R.id.tv_4_max);
-        TextView tv5MaxTemp = view.findViewById(R.id.tv_5_max);
-        tvMaxList.add(tv1MaxTemp);
-        tvMaxList.add(tv2MaxTemp);
-        tvMaxList.add(tv3MaxTemp);
-        tvMaxList.add(tv4MaxTemp);
-        tvMaxList.add(tv5MaxTemp);
+        rvForecast = view.findViewById(R.id.rv_forecast);
 
         tvTodayTitle = view.findViewById(R.id.tv_today_title);
         tvForecastTitle = view.findViewById(R.id.tv_forecast_title);
@@ -370,14 +312,6 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         };
     }
 
-    private void setWeeks(List<TextView> tvWeekList) {
-        DateTime now = DateTime.now();
-        tvWeek1.setText(getString(R.string.today));
-        for (int i = 1; i < tvWeekList.size(); i++) {
-            tvWeekList.get(i).setText(getWeek(now.plusDays(i).getDayOfWeek()));
-        }
-    }
-
     private void initData(String location) {
         WeatherImpl weatherImpl = new WeatherImpl(this.getActivity(), this);
         weatherImpl.getWeatherHourly(location);
@@ -436,45 +370,31 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
             moonView.setTimes(moonRise, moonSet, currentTime);
             hasAni = true;
         }
+
+        getWeatherForecast(weatherForecastBean);
+
         if (!ContentUtil.APP_PRI_TESI.equalsIgnoreCase(ContentUtil.APP_SETTING_TESI)) {
             switch (ContentUtil.APP_PRI_TESI) {
                 case "small":
                     if ("mid".equalsIgnoreCase(ContentUtil.APP_SETTING_TESI)) {
                         smallMid(textViewList);
-                        smallMid(tvMaxList);
-                        smallMid(tvMinList);
-                        smallMid(tvWeekList);
                     } else if ("large".equalsIgnoreCase(ContentUtil.APP_SETTING_TESI)) {
+
                         smallLarge(textViewList);
-                        smallLarge(tvMaxList);
-                        smallLarge(tvMinList);
-                        smallLarge(tvWeekList);
                     }
                     break;
                 case "mid":
                     if ("small".equalsIgnoreCase(ContentUtil.APP_SETTING_TESI)) {
                         midSmall(textViewList);
-                        midSmall(tvMaxList);
-                        midSmall(tvMinList);
-                        midSmall(tvWeekList);
                     } else if ("large".equalsIgnoreCase(ContentUtil.APP_SETTING_TESI)) {
                         midLarge(textViewList);
-                        midLarge(tvMaxList);
-                        midLarge(tvMinList);
-                        midLarge(tvWeekList);
                     }
                     break;
                 case "large":
                     if ("small".equalsIgnoreCase(ContentUtil.APP_SETTING_TESI)) {
                         largeSmall(textViewList);
-                        largeSmall(tvMaxList);
-                        largeSmall(tvMinList);
-                        largeSmall(tvWeekList);
                     } else if ("mid".equalsIgnoreCase(ContentUtil.APP_SETTING_TESI)) {
                         largeMid(textViewList);
-                        largeMid(tvMaxList);
-                        largeMid(tvMinList);
-                        largeMid(tvWeekList);
                     }
                     break;
             }
@@ -532,35 +452,35 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
             now = now.plusMinutes(((int) minute));
             currentTime = now.toString("HH:mm");
             List<ForecastBase> daily_forecast = bean.getDaily_forecast();
-            for (int i = 0; i < 5; i++) {
-                ForecastBase forecastBase = daily_forecast.get(i);
-                String condCodeD = forecastBase.getCond_code_d();
-                String condCodeN = forecastBase.getCond_code_n();
-                String tmpMin = forecastBase.getTmp_min();
-                String tmpMax = forecastBase.getTmp_max();
-                if (ContentUtil.APP_SETTING_UNIT.equals("hua")) {
-                    tmpMax = String.valueOf(TransUnitUtil.getF(tmpMax));
-                    tmpMin = String.valueOf(TransUnitUtil.getF(tmpMin));
-                }
-                if (i == 0) {
-                    sunrise = forecastBase.getSr();
-                    sunset = forecastBase.getSs();
-                    moonRise = forecastBase.getMr();
-                    moonSet = forecastBase.getMs();
-                    sunView.setTimes(sunrise, sunset, currentTime);
-                    moonView.setTimes(moonRise, moonSet, currentTime);
-                    todayMaxTmp = tmpMax;
-                    todayMinTmp = tmpMin;
-                    tvTodayMax.setText(tmpMax + "°");
-                    tvTodayMin.setText(tmpMin + "°");
-                    ivTodayDay.setImageResource(IconUtils.getDayIconDark(condCodeD));
-                    ivTodayNight.setImageResource(IconUtils.getNightIconDark(condCodeN));
-                }
-                ivDayList.get(i).setImageResource(IconUtils.getDayIconDark(condCodeD));
-                ivNightList.get(i).setImageResource(IconUtils.getNightIconDark(condCodeN));
-                tvMaxList.get(i).setText(tmpMax + "°");
-                tvMinList.get(i).setText(tmpMin + "°");
+
+            ForecastBase forecastBase = daily_forecast.get(0);
+            String condCodeD = forecastBase.getCond_code_d();
+            String condCodeN = forecastBase.getCond_code_n();
+            String tmpMin = forecastBase.getTmp_min();
+            String tmpMax = forecastBase.getTmp_max();
+            sunrise = forecastBase.getSr();
+            sunset = forecastBase.getSs();
+            moonRise = forecastBase.getMr();
+            moonSet = forecastBase.getMs();
+            sunView.setTimes(sunrise, sunset, currentTime);
+            moonView.setTimes(moonRise, moonSet, currentTime);
+            todayMaxTmp = tmpMax;
+            todayMinTmp = tmpMin;
+            tvTodayMax.setText(tmpMax + "°");
+            tvTodayMin.setText(tmpMin + "°");
+            ivTodayDay.setImageResource(IconUtils.getDayIconDark(condCodeD));
+            ivTodayNight.setImageResource(IconUtils.getNightIconDark(condCodeN));
+
+            if (forecastAdapter == null) {
+                forecastAdapter = new ForecastAdapter(getActivity(), daily_forecast);
+                rvForecast.setAdapter(forecastAdapter);
+                LinearLayoutManager forecastManager = new LinearLayoutManager(getActivity());
+                forecastManager.setOrientation(LinearLayoutManager.VERTICAL);
+                rvForecast.setLayoutManager(forecastManager);
+            } else {
+                forecastAdapter.refreshData(getActivity(), daily_forecast);
             }
+
         }
     }
 
@@ -834,7 +754,10 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
 
     private void changeLang() {
         initData(location);
-        setWeeks(tvWeekList);
+//        setWeeks(tvWeekList);
+        if (forecastAdapter != null) {
+            forecastAdapter.notifyDataSetChanged();
+        }
         tvTodayTitle.setText(R.string.today_title);
         tvForecastTitle.setText(R.string.forecast);
         tvMin.setText(R.string.min_tmp);

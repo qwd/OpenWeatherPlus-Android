@@ -34,10 +34,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.activity.MainActivity"
+            android:exported="true"
             android:launchMode="singleInstance" />
         <activity android:name=".view.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -47,19 +49,20 @@
         <!-- 设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="高德的key" />
+            android:value="9656fca1e4cef43a19082b4f37b600bb" />
 
         <service android:name="com.amap.api.location.APSService" />
         <service
             android:name=".service.LocationService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:permission="android.permission.ACCESS_FINE_LOCATION" />
 
         <activity android:name=".view.activity.SettingActivity" />
         <activity android:name=".view.activity.ControlCityActivity" />
         <activity android:name=".view.activity.AboutActivity" />
         <activity android:name=".view.activity.BaseActivity" />
-        <activity android:name=".view.activity.SearchActivity"/>
+        <activity android:name=".view.activity.SearchActivity" />
     </application>
 
 </manifest>

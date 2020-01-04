@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: __local_aars__:/Users/niuchong/Documents/AndroidProject/OpenWeatherPlus-Android/app/libs/sdk_HeWeather_Public_Android_V2.4.jar:unspecified@jar">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/sdk_HeWeather_Public_Android_V2.4.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
