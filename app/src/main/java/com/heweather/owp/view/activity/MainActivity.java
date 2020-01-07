@@ -41,6 +41,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import interfaces.heweather.com.interfacesmodule.bean.Code;
 import interfaces.heweather.com.interfacesmodule.bean.Lang;
 import interfaces.heweather.com.interfacesmodule.bean.basic.Basic;
 import interfaces.heweather.com.interfacesmodule.bean.search.Search;
@@ -260,15 +261,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     }
 
                     @Override
-                    public void onSuccess(List<Now> list) {
-                        NowBase now = list.get(0).getNow();
-                        condCode = now.getCond_code();
-                        DateTime nowTime = DateTime.now();
-                        int hourOfDay = nowTime.getHourOfDay();
-                        if (hourOfDay > 6 && hourOfDay < 19) {
-                            ivBack.setImageResource(IconUtils.getDayBack(condCode));
-                        } else {
-                            ivBack.setImageResource(IconUtils.getNightBack(condCode));
+                    public void onSuccess(Now list) {
+                        if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
+                            NowBase now = list.getNow();
+                            condCode = now.getCond_code();
+                            DateTime nowTime = DateTime.now();
+                            int hourOfDay = nowTime.getHourOfDay();
+                            if (hourOfDay > 6 && hourOfDay < 19) {
+                                ivBack.setImageResource(IconUtils.getDayBack(condCode));
+                            } else {
+                                ivBack.setImageResource(IconUtils.getNightBack(condCode));
+                            }
                         }
                     }
                 });

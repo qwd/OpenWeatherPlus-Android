@@ -7,8 +7,8 @@ android {
         applicationId "com.heweather.owp"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -83,9 +83,9 @@ dependencies {
     implementation 'joda-time:joda-time:2.10'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.zhy:okhttputils:2.6.2'
-    implementation files('libs/sdk_HeWeather_Public_Android_V2.4.jar')
     implementation files('libs/android-logging-log4j-1.0.3.jar')
     implementation files('libs/log4j-1.2.17.jar')
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation files('libs/AMap_Location_V4.0.1_20180426.jar')
+    implementation files('libs/HeWeather_Android_Common_V3.2.jar')
 }
