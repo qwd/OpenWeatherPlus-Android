@@ -9,12 +9,11 @@ import com.heweather.owp.presenters.WeatherPresenters;
 import com.heweather.owp.utils.ContentUtil;
 import com.heweather.owp.utils.SpUtils;
 
-import java.util.List;
-
+import interfaces.heweather.com.interfacesmodule.bean.Code;
 import interfaces.heweather.com.interfacesmodule.bean.Lang;
 import interfaces.heweather.com.interfacesmodule.bean.Unit;
 import interfaces.heweather.com.interfacesmodule.bean.air.now.AirNow;
-import interfaces.heweather.com.interfacesmodule.bean.alarm.Alarm;
+import interfaces.heweather.com.interfacesmodule.bean.alarm.AlarmList;
 import interfaces.heweather.com.interfacesmodule.bean.search.Search;
 import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.Forecast;
 import interfaces.heweather.com.interfacesmodule.bean.weather.hourly.Hourly;
@@ -55,9 +54,11 @@ public class WeatherImpl implements WeatherPresenters {
             }
 
             @Override
-            public void onSuccess(List<Now> list) {
-                weatherInterface.getWeatherNow(list.get(0));
-                SpUtils.saveBean(context, "weatherNow", list.get(0));
+            public void onSuccess(Now list) {
+                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
+                    weatherInterface.getWeatherNow(list);
+                    SpUtils.saveBean(context, "weatherNow", list);
+                }
             }
         });
 
@@ -76,11 +77,12 @@ public class WeatherImpl implements WeatherPresenters {
             }
 
             @Override
-            public void onSuccess(List<Forecast> list) {
-                weatherInterface.getWeatherForecast(list.get(0));
-                getAirForecast(location);
-                SpUtils.saveBean(context, "weatherForecast", list.get(0));
-
+            public void onSuccess(Forecast list) {
+                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
+                    weatherInterface.getWeatherForecast(list);
+                    getAirForecast(location);
+                    SpUtils.saveBean(context, "weatherForecast", list);
+                }
             }
         });
     }
@@ -95,10 +97,13 @@ public class WeatherImpl implements WeatherPresenters {
             }
 
             @Override
-            public void onSuccess(List<Alarm> list) {
-                weatherInterface.getAlarm(list.get(0));
-                SpUtils.saveBean(context, "alarm", list.get(0));
+            public void onSuccess(AlarmList alarmList) {
+                if (Code.OK.getCode().equalsIgnoreCase(alarmList.getStatus())) {
+                    weatherInterface.getAlarm(alarmList.getAlarms().get(0));
+                    SpUtils.saveBean(context, "alarm", alarmList);
+                }
             }
+
         });
     }
 
@@ -112,10 +117,11 @@ public class WeatherImpl implements WeatherPresenters {
             }
 
             @Override
-            public void onSuccess(List<AirNow> list) {
-                AirNow airNow = list.get(0);
-                weatherInterface.getAirNow(airNow);
-                SpUtils.saveBean(context, "airNow", airNow);
+            public void onSuccess(AirNow list) {
+                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
+                    weatherInterface.getAirNow(list);
+                    SpUtils.saveBean(context, "airNow", list);
+                }
             }
         });
     }
@@ -140,9 +146,10 @@ public class WeatherImpl implements WeatherPresenters {
                     }
 
                     @Override
-                    public void onSuccess(List<AirNow> list) {
-                        AirNow airNow = list.get(0);
-                        weatherInterface.getAirNow(airNow);
+                    public void onSuccess(AirNow airNow) {
+                        if (Code.OK.getCode().equalsIgnoreCase(airNow.getStatus())) {
+                            weatherInterface.getAirNow(airNow);
+                        }
                     }
                 });
             }
@@ -178,9 +185,11 @@ public class WeatherImpl implements WeatherPresenters {
             }
 
             @Override
-            public void onSuccess(List<Hourly> list) {
-                weatherInterface.getWeatherHourly(list.get(0));
-                SpUtils.saveBean(context, "weatherHourly", list.get(0));
+            public void onSuccess(Hourly list) {
+                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
+                    weatherInterface.getWeatherHourly(list);
+                    SpUtils.saveBean(context, "weatherHourly", list);
+                }
             }
         });
     }
