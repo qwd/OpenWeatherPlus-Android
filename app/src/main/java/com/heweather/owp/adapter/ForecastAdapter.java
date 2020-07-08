@@ -12,23 +12,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.heweather.owp.R;
-import com.heweather.owp.bean.CityBean;
 import com.heweather.owp.utils.ContentUtil;
 import com.heweather.owp.utils.IconUtils;
-import com.heweather.owp.view.activity.ControlCityActivity;
 
 import org.joda.time.DateTime;
 
 import java.util.List;
 
-import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.ForecastBase;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherDailyBean;
 
 public class ForecastAdapter extends Adapter<ForecastAdapter.MyViewHolder> {
 
-    private List<ForecastBase> datas;
+    private List<WeatherDailyBean.DailyBean> datas;
     private Context context;
 
-    public ForecastAdapter(Context context, List<ForecastBase> datas) {
+    public ForecastAdapter(Context context, List<WeatherDailyBean.DailyBean> datas) {
         this.datas = datas;
         this.context = context;
     }
@@ -40,7 +38,7 @@ public class ForecastAdapter extends Adapter<ForecastAdapter.MyViewHolder> {
         return new MyViewHolder(view);
     }
 
-    public void refreshData(Context context, List<ForecastBase> datas) {
+    public void refreshData(Context context, List<WeatherDailyBean.DailyBean> datas) {
         this.datas = datas;
         this.context = context;
         notifyDataSetChanged();
@@ -49,11 +47,11 @@ public class ForecastAdapter extends Adapter<ForecastAdapter.MyViewHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, @SuppressLint("RecyclerView") final int i) {
-        ForecastBase forecastBase = datas.get(i);
-        String condCodeD = forecastBase.getCond_code_d();
-        String condCodeN = forecastBase.getCond_code_n();
-        String tmpMin = forecastBase.getTmp_min();
-        String tmpMax = forecastBase.getTmp_max();
+        WeatherDailyBean.DailyBean forecastBase = datas.get(i);
+        String condCodeD = forecastBase.getIconDay();
+        String condCodeN = forecastBase.getIconNight();
+        String tmpMin = forecastBase.getTempMin();
+        String tmpMax = forecastBase.getTempMax();
         myViewHolder.tvMax.setText(tmpMax + "°");
         myViewHolder.tvMin.setText(tmpMin + "°");
         myViewHolder.ivDay.setImageResource(IconUtils.getDayIconDark(condCodeD));

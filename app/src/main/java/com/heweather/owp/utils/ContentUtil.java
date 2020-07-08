@@ -10,7 +10,7 @@ import com.heweather.owp.MyApplication;
 public class ContentUtil {
 
     //用户id
-    public static final String APK_USERNAME = "HE1903211415311839";
+    public static final String PUBLIC_ID = "HE1903211415311839";
     //用户key
     public static final String APK_KEY = "a7b3fdf76a2b44fc91e36b2afe63d080";
     //当前所在位置

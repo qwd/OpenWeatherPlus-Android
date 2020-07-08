@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import interfaces.heweather.com.interfacesmodule.bean.weather.hourly.HourlyBase;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherHourlyBean;
 
 /**
  * Created by niu on 18/11/22.
@@ -56,7 +56,7 @@ public class HourlyForecastView extends View implements ScrollWatcher {
     private int textSize;
 
     //数据
-    private List<HourlyBase> hourlyWeatherList;
+    private List<WeatherHourlyBean.HourlyBean> hourlyWeatherList;
 
     //画虚线的点的index
     private List<Integer> dashLineList;
@@ -132,10 +132,10 @@ public class HourlyForecastView extends View implements ScrollWatcher {
         initPaint();
     }
 
-    private static int ITEM_SIZE = 8;  //8格
+    private static int ITEM_SIZE = 24;
 
 
-    public void initData(List<HourlyBase> weatherData) {
+    public void initData(List<WeatherHourlyBean.HourlyBean> weatherData) {
 
         hourlyWeatherList = weatherData;
         int size = weatherData.size();
@@ -144,17 +144,17 @@ public class HourlyForecastView extends View implements ScrollWatcher {
         dashLineList = new ArrayList<>();
 
         Iterator iterator = weatherData.iterator();
-        HourlyBase hourlyBase;
+        WeatherHourlyBean.HourlyBean hourlyBase;
         String lastText = "";
 
 
         int idx = 0;
         while (iterator.hasNext()) {
-            hourlyBase = (HourlyBase) iterator.next();
-            if (!hourlyBase.getCond_code().equals(lastText)) {
+            hourlyBase = (WeatherHourlyBean.HourlyBean) iterator.next();
+            if (!hourlyBase.getIcon().equals(lastText)) {
                 if (idx != size - 1) {
                     dashLineList.add(idx);//从0开始添加虚线位置的索引值idx
-                    lastText = hourlyBase.getCond_code();
+                    lastText = hourlyBase.getIcon();
                 }
             }
             idx++;
@@ -168,7 +168,7 @@ public class HourlyForecastView extends View implements ScrollWatcher {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;
 
-        itemWidth = DisplayUtil.dp2px(mContext, 60);
+        itemWidth = DisplayUtil.dp2px(mContext, 30);
 
         defWidthPixel = itemWidth * (ITEM_SIZE - 1);
         defHeightPixel = DisplayUtil.dp2px(mContext, 80);
@@ -292,7 +292,7 @@ public class HourlyForecastView extends View implements ScrollWatcher {
             if (currentItemIndex == i) {
                 //计算提示文字的运动轨迹
 //                int Y = getTempBarY(i);
-                String tmp = hourlyWeatherList.get(i).getTmp();
+                String tmp = hourlyWeatherList.get(i).getTemp();
                 float temp = Integer.parseInt(tmp);
                 int Y = (int) (tempHeightPixel(temp) + paddingT);
                 //画出温度提示
@@ -352,7 +352,7 @@ public class HourlyForecastView extends View implements ScrollWatcher {
             }
 
 
-            String code = hourlyWeatherList.get(dashLineList.get(i)).getCond_code();
+            String code = hourlyWeatherList.get(dashLineList.get(i)).getIcon();
             BitmapDrawable bd;
 
 
@@ -400,7 +400,7 @@ public class HourlyForecastView extends View implements ScrollWatcher {
         List<Point> mPointList = new ArrayList<>();
 
         for (int i = 0; i < hourlyWeatherList.size(); i++) {
-            float temp = Integer.parseInt(hourlyWeatherList.get(i).getTmp());
+            float temp = Integer.parseInt(hourlyWeatherList.get(i).getTemp());
 
             float w = itemWidth * i + paddingL;
             float h = tempHeightPixel(temp) + paddingT;
@@ -511,29 +511,29 @@ public class HourlyForecastView extends View implements ScrollWatcher {
         drawDashLine(dashWidth, dashHeight, canvas);
 
         for (int i = 0; i < hourlyWeatherList.size(); i++) {
-            float temp = Integer.parseInt(hourlyWeatherList.get(i).getTmp());
+            float temp = Integer.parseInt(hourlyWeatherList.get(i).getTemp());
 
             float w = itemWidth * i + paddingL;
             float h = tempHeightPixel(temp) + paddingT;
 
             //画时间
-            String time = hourlyWeatherList.get(i).getTime();
+            String time = hourlyWeatherList.get(i).getFxTime();
             //画时间
-            if (ITEM_SIZE > 8){
+            if (ITEM_SIZE > 8) {
                 if (i % 2 == 0) {
                     if (i == 0) {
                         textPaint.setTextAlign(Paint.Align.LEFT);
                     } else {
                         textPaint.setTextAlign(Paint.Align.CENTER);
                     }
-                    canvas.drawText(time.substring(time.length() - 5), w, baseLineHeight + textSize + DisplayUtil.dip2px(mContext, 3), textPaint);
+                    canvas.drawText(time.substring(time.length() - 11, time.length() - 6), w, baseLineHeight + textSize + DisplayUtil.dip2px(mContext, 3), textPaint);
                 }
-            }else {
+            } else {
                 textPaint.setTextAlign(Paint.Align.CENTER);
                 if (i == 0) {
                     canvas.drawText(mContext.getString(R.string.now), w, baseLineHeight + textSize + DisplayUtil.dip2px(mContext, 3), textPaint);
                 } else {
-                    canvas.drawText(time.substring(time.length() - 5), w, baseLineHeight + textSize + DisplayUtil.dip2px(mContext, 3), textPaint);
+                    canvas.drawText(time.substring(time.length() - 11, time.length() - 6), w, baseLineHeight + textSize + DisplayUtil.dip2px(mContext, 3), textPaint);
                 }
             }
         }

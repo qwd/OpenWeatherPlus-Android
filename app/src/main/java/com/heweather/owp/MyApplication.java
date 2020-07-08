@@ -29,8 +29,8 @@ public class MyApplication extends Application {
         instance = this;
         //在主线程中new的handler就是主线程的handler
         //初始化Handler
-        HeConfig.init(ContentUtil.APK_USERNAME, ContentUtil.APK_KEY);
-        HeConfig.switchToFreeServerNode();
+        HeConfig.init(ContentUtil.PUBLIC_ID, ContentUtil.APK_KEY);
+        HeConfig.switchToDevService();
         configLog();
 
     }

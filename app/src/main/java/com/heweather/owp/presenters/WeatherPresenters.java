@@ -19,7 +19,7 @@ public interface WeatherPresenters {
     /**
      * 灾害天气预警
      */
-    void getAlarm(String location);
+    void getWarning(String location);
 
     /**
      * 空气实况

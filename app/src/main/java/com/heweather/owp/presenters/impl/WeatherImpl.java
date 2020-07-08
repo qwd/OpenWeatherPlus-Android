@@ -9,15 +9,17 @@ import com.heweather.owp.presenters.WeatherPresenters;
 import com.heweather.owp.utils.ContentUtil;
 import com.heweather.owp.utils.SpUtils;
 
-import interfaces.heweather.com.interfacesmodule.bean.Code;
-import interfaces.heweather.com.interfacesmodule.bean.Lang;
-import interfaces.heweather.com.interfacesmodule.bean.Unit;
-import interfaces.heweather.com.interfacesmodule.bean.air.now.AirNow;
-import interfaces.heweather.com.interfacesmodule.bean.alarm.AlarmList;
-import interfaces.heweather.com.interfacesmodule.bean.search.Search;
-import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.Forecast;
-import interfaces.heweather.com.interfacesmodule.bean.weather.hourly.Hourly;
-import interfaces.heweather.com.interfacesmodule.bean.weather.now.Now;
+import interfaces.heweather.com.interfacesmodule.bean.WarningBean;
+import interfaces.heweather.com.interfacesmodule.bean.air.AirNowBean;
+import interfaces.heweather.com.interfacesmodule.bean.base.Code;
+import interfaces.heweather.com.interfacesmodule.bean.base.Lang;
+import interfaces.heweather.com.interfacesmodule.bean.base.Mode;
+import interfaces.heweather.com.interfacesmodule.bean.base.Range;
+import interfaces.heweather.com.interfacesmodule.bean.base.Unit;
+import interfaces.heweather.com.interfacesmodule.bean.geo.GeoBean;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherDailyBean;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherHourlyBean;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherNowBean;
 import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 
 /**
@@ -37,29 +39,30 @@ public class WeatherImpl implements WeatherPresenters {
         this.context = context;
         this.weatherInterface = weatherInterface;
         if (ContentUtil.APP_SETTING_LANG.equals("en") || ContentUtil.APP_SETTING_LANG.equals("sys") && ContentUtil.SYS_LANG.equals("en")) {
-            lang = Lang.ENGLISH;
+            lang = Lang.EN;
         } else {
-            lang = Lang.CHINESE_SIMPLIFIED;
+            lang = Lang.ZH_HANS;
         }
         unit = Unit.METRIC;
     }
 
     @Override
     public void getWeatherNow(String location) {
-        HeWeather.getWeatherNow(context, location, lang, unit, new HeWeather.OnResultWeatherNowBeanListener() {
+        HeWeather.getWeatherNow(context, location, lang, unit, new HeWeather.OnResultWeatherNowListener() {
             @Override
             public void onError(Throwable throwable) {
-                Now weatherNow = SpUtils.getBean(context, "weatherNow", Now.class);
+                WeatherNowBean weatherNow = SpUtils.getBean(context, "weatherNow", WeatherNowBean.class);
                 weatherInterface.getWeatherNow(weatherNow);
             }
 
             @Override
-            public void onSuccess(Now list) {
-                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
-                    weatherInterface.getWeatherNow(list);
-                    SpUtils.saveBean(context, "weatherNow", list);
+            public void onSuccess(WeatherNowBean weatherNowBean) {
+                if (Code.OK.getCode().equalsIgnoreCase(weatherNowBean.getCode())) {
+                    weatherInterface.getWeatherNow(weatherNowBean);
+                    SpUtils.saveBean(context, "weatherNow", weatherNowBean);
                 }
             }
+
         });
 
     }
@@ -67,40 +70,44 @@ public class WeatherImpl implements WeatherPresenters {
 
     @Override
     public void getWeatherForecast(final String location) {
-        HeWeather.getWeatherForecast(context, location, lang, unit, new HeWeather.OnResultWeatherForecastBeanListener() {
+
+        HeWeather.getWeather3D(context, location, lang, unit, new HeWeather.OnResultWeatherDailyListener() {
             @Override
             public void onError(Throwable throwable) {
                 Log.i("sky", "getWeatherForecast onError: ");
-                Forecast weatherForecast = SpUtils.getBean(context, "weatherForecast", Forecast.class);
+                WeatherDailyBean weatherForecast = SpUtils.getBean(context, "weatherForecast", WeatherDailyBean.class);
                 weatherInterface.getWeatherForecast(weatherForecast);
                 getAirForecast(location);
             }
 
             @Override
-            public void onSuccess(Forecast list) {
-                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
-                    weatherInterface.getWeatherForecast(list);
+            public void onSuccess(WeatherDailyBean weatherDailyBean) {
+                if (Code.OK.getCode().equalsIgnoreCase(weatherDailyBean.getCode())) {
+                    weatherInterface.getWeatherForecast(weatherDailyBean);
                     getAirForecast(location);
-                    SpUtils.saveBean(context, "weatherForecast", list);
+                    SpUtils.saveBean(context, "weatherForecast", weatherDailyBean);
                 }
             }
+
         });
     }
 
     @Override
-    public void getAlarm(String location) {
-        HeWeather.getAlarm(context, location, lang, unit, new HeWeather.OnResultAlarmBeansListener() {
+    public void getWarning(String location) {
+        HeWeather.getWarning(context, location, lang, new HeWeather.OnResultWarningListener() {
             @Override
             public void onError(Throwable throwable) {
-                weatherInterface.getAlarm(null);
-                Log.i("sky", "getAlarm onError: " + throwable);
+                weatherInterface.getWarning(null);
+                Log.i("sky", "getWarning onError: " + throwable);
             }
 
             @Override
-            public void onSuccess(AlarmList alarmList) {
-                if (Code.OK.getCode().equalsIgnoreCase(alarmList.getStatus())) {
-                    weatherInterface.getAlarm(alarmList.getAlarms().get(0));
-                    SpUtils.saveBean(context, "alarm", alarmList);
+            public void onSuccess(WarningBean warningBean) {
+                if (Code.OK.getCode().equalsIgnoreCase(warningBean.getCode())) {
+                    if (warningBean.getBeanBaseList() != null && warningBean.getBeanBaseList().size() > 0) {
+                        weatherInterface.getWarning(warningBean.getBeanBaseList().get(0));
+                        SpUtils.saveBean(context, "alarm", warningBean);
+                    }
                 }
             }
 
@@ -109,7 +116,7 @@ public class WeatherImpl implements WeatherPresenters {
 
     @Override
     public void getAirNow(final String location) {
-        HeWeather.getAirNow(context, location, lang, unit, new HeWeather.OnResultAirNowBeansListener() {
+        HeWeather.getAirNow(context, location, lang, new HeWeather.OnResultAirNowListener() {
             @Override
             public void onError(Throwable throwable) {
                 Log.i("sky", "getAirNow onError: ");
@@ -117,37 +124,37 @@ public class WeatherImpl implements WeatherPresenters {
             }
 
             @Override
-            public void onSuccess(AirNow list) {
-                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
-                    weatherInterface.getAirNow(list);
-                    SpUtils.saveBean(context, "airNow", list);
+            public void onSuccess(AirNowBean airNowBean) {
+                if (Code.OK.getCode().equalsIgnoreCase(airNowBean.getCode())) {
+                    weatherInterface.getAirNow(airNowBean);
+                    SpUtils.saveBean(context, "airNow", airNowBean);
                 }
             }
         });
     }
 
     private void getParentAir(String location) {
-        HeWeather.getSearch(context, location, "cn,overseas", 3, lang, new HeWeather.OnResultSearchBeansListener() {
+        HeWeather.getGeoCityLookup(context, location, Mode.FUZZY, Range.WORLD, 3, lang, new HeWeather.OnResultGeoListener() {
             @Override
             public void onError(Throwable throwable) {
 
             }
 
             @Override
-            public void onSuccess(Search search) {
-                String parentCity = search.getBasic().get(0).getParent_city();
+            public void onSuccess(GeoBean geoBean) {
+                String parentCity = geoBean.getLocationBean().get(0).getAdm2();
                 if (TextUtils.isEmpty(parentCity)) {
-                    parentCity = search.getBasic().get(0).getAdmin_area();
+                    parentCity = geoBean.getLocationBean().get(0).getAdm1();
                 }
-                HeWeather.getAirNow(context, parentCity, lang, unit, new HeWeather.OnResultAirNowBeansListener() {
+                HeWeather.getAirNow(context, parentCity, lang, new HeWeather.OnResultAirNowListener() {
                     @Override
                     public void onError(Throwable throwable) {
                         weatherInterface.getAirNow(null);
                     }
 
                     @Override
-                    public void onSuccess(AirNow airNow) {
-                        if (Code.OK.getCode().equalsIgnoreCase(airNow.getStatus())) {
+                    public void onSuccess(AirNowBean airNow) {
+                        if (Code.OK.getCode().equalsIgnoreCase(airNow.getCode())) {
                             weatherInterface.getAirNow(airNow);
                         }
                     }
@@ -178,17 +185,17 @@ public class WeatherImpl implements WeatherPresenters {
 
     @Override
     public void getWeatherHourly(String location) {
-        HeWeather.getWeatherHourly(context, location, lang, unit, new HeWeather.OnResultWeatherHourlyBeanListener() {
+        HeWeather.getWeather24Hourly(context, location, lang, unit, new HeWeather.OnResultWeatherHourlyListener() {
             @Override
             public void onError(Throwable throwable) {
                 Log.i("sky", "getWeatherHourly onError: getWeatherHourly");
             }
 
             @Override
-            public void onSuccess(Hourly list) {
-                if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
-                    weatherInterface.getWeatherHourly(list);
-                    SpUtils.saveBean(context, "weatherHourly", list);
+            public void onSuccess(WeatherHourlyBean weatherHourlyBean) {
+                if (Code.OK.getCode().equalsIgnoreCase(weatherHourlyBean.getCode())) {
+                    weatherInterface.getWeatherHourly(weatherHourlyBean);
+                    SpUtils.saveBean(context, "weatherHourly", weatherHourlyBean);
                 }
             }
         });
