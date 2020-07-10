@@ -14,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.R;
 import com.heweather.owp.bean.CityBean;
 import com.heweather.owp.bean.CityBeanList;
+import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.utils.ContentUtil;
 import com.heweather.owp.utils.SpUtils;
 import com.heweather.owp.view.activity.SearchActivity;
@@ -25,9 +25,11 @@ import com.heweather.owp.view.activity.SearchActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.heweather.com.interfacesmodule.bean.Lang;
-import interfaces.heweather.com.interfacesmodule.bean.basic.Basic;
-import interfaces.heweather.com.interfacesmodule.bean.search.Search;
+import interfaces.heweather.com.interfacesmodule.bean.base.Code;
+import interfaces.heweather.com.interfacesmodule.bean.base.Lang;
+import interfaces.heweather.com.interfacesmodule.bean.base.Mode;
+import interfaces.heweather.com.interfacesmodule.bean.base.Range;
+import interfaces.heweather.com.interfacesmodule.bean.geo.GeoBean;
 import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 
 /**
@@ -53,9 +55,9 @@ public class SearchAdapter extends Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         if (ContentUtil.APP_SETTING_LANG.equals("en") || ContentUtil.APP_SETTING_LANG.equals("sys") && ContentUtil.SYS_LANG.equals("en")) {
-            lang = Lang.ENGLISH;
+            lang = Lang.EN;
         } else {
-            lang = Lang.CHINESE_SIMPLIFIED;
+            lang = Lang.ZH_HANS;
         }
         View view;
         if (isSearching) {
@@ -95,11 +97,11 @@ public class SearchAdapter extends Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View view) {
                 final String cid = data.get(i).getCityId();
-                if (lang.equals(Lang.CHINESE_SIMPLIFIED)) {
-                    saveData(Lang.ENGLISH, "cityBeanEn", cid);
+                if (lang.equals(Lang.ZH_HANS)) {
+                    saveData(Lang.EN, "cityBeanEn", cid);
                     saveBean("cityBean", cid, i);
                 } else {
-                    saveData(Lang.CHINESE_SIMPLIFIED, "cityBean", cid);
+                    saveData(Lang.ZH_HANS, "cityBean", cid);
                     saveBean("cityBeanEn", cid, i);
                 }
                 activity.onBackPressed();
@@ -130,7 +132,7 @@ public class SearchAdapter extends Adapter<RecyclerView.ViewHolder> {
     }
 
     private void saveData(Lang lang, final String key, final String cid) {
-        HeWeather.getSearch(activity, cid, "cn,overseas", 1, lang, new HeWeather.OnResultSearchBeansListener() {
+        HeWeather.getGeoCityLookup(activity, cid, Mode.FUZZY, Range.WORLD, 1, lang, new HeWeather.OnResultGeoListener() {
             @Override
             public void onError(Throwable throwable) {
                 Log.i("sky", "onError: ");
@@ -138,14 +140,14 @@ public class SearchAdapter extends Adapter<RecyclerView.ViewHolder> {
             }
 
             @Override
-            public void onSuccess(Search search) {
+            public void onSuccess(GeoBean search) {
                 List<CityBean> citys = new ArrayList<>();
-                if (!search.getStatus().equals("unknown city") && !search.getStatus().equals("noData")) {
-                    List<Basic> basic = search.getBasic();
-                    Basic basicData = basic.get(0);
-                    String parentCity = basicData.getParent_city();
-                    String adminArea = basicData.getAdmin_area();
-                    String cnty = basicData.getCnty();
+                if (search.getStatus().equals(Code.OK.getCode())) {
+                    List<GeoBean.LocationBean> basic = search.getLocationBean();
+                    GeoBean.LocationBean basicData = basic.get(0);
+                    String parentCity = basicData.getAdm2();
+                    String adminArea = basicData.getAdm1();
+                    String cnty = basicData.getCountry();
                     if (TextUtils.isEmpty(parentCity)) {
                         parentCity = adminArea;
                     }
@@ -153,8 +155,8 @@ public class SearchAdapter extends Adapter<RecyclerView.ViewHolder> {
                         parentCity = cnty;
                     }
                     CityBean cityBean = new CityBean();
-                    cityBean.setCityName(parentCity + " - " + basicData.getLocation());
-                    cityBean.setCityId(basicData.getCid());
+                    cityBean.setCityName(parentCity + " - " + basicData.getName());
+                    cityBean.setCityId(basicData.getId());
                     cityBean.setCnty(cnty);
                     cityBean.setAdminArea(adminArea);
 

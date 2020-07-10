@@ -23,12 +23,12 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.heweather.owp.dataInterface.DataInterface;
-import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.R;
 import com.heweather.owp.adapter.ViewPagerAdapter;
 import com.heweather.owp.bean.CityBean;
 import com.heweather.owp.bean.CityBeanList;
+import com.heweather.owp.dataInterface.DataInterface;
+import com.heweather.owp.dataInterface.DataUtil;
 import com.heweather.owp.utils.ContentUtil;
 import com.heweather.owp.utils.DisplayUtil;
 import com.heweather.owp.utils.IconUtils;
@@ -41,12 +41,12 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.heweather.com.interfacesmodule.bean.Code;
-import interfaces.heweather.com.interfacesmodule.bean.Lang;
-import interfaces.heweather.com.interfacesmodule.bean.basic.Basic;
-import interfaces.heweather.com.interfacesmodule.bean.search.Search;
-import interfaces.heweather.com.interfacesmodule.bean.weather.now.Now;
-import interfaces.heweather.com.interfacesmodule.bean.weather.now.NowBase;
+import interfaces.heweather.com.interfacesmodule.bean.base.Code;
+import interfaces.heweather.com.interfacesmodule.bean.base.Lang;
+import interfaces.heweather.com.interfacesmodule.bean.base.Mode;
+import interfaces.heweather.com.interfacesmodule.bean.base.Range;
+import interfaces.heweather.com.interfacesmodule.bean.geo.GeoBean;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherNowBean;
 import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -190,11 +190,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void getNowCity(final boolean first) {
         Lang lang;
         if (ContentUtil.APP_SETTING_LANG.equals("en") || ContentUtil.APP_SETTING_LANG.equals("sys") && ContentUtil.SYS_LANG.equals("en")) {
-            lang = Lang.ENGLISH;
+            lang = Lang.EN;
         } else {
-            lang = Lang.CHINESE_SIMPLIFIED;
+            lang = Lang.ZH_HANS;
         }
-        HeWeather.getSearch(this, ContentUtil.NOW_LON + "," + ContentUtil.NOW_LAT, "cn,overseas", 3, lang, new HeWeather.OnResultSearchBeansListener() {
+        HeWeather.getGeoCityLookup(this, ContentUtil.NOW_LON + "," + ContentUtil.NOW_LAT, Mode.FUZZY, Range.WORLD, 3, lang, new HeWeather.OnResultGeoListener() {
             @Override
             public void onError(Throwable throwable) {
                 List<CityBean> cityBeans = new ArrayList<>();
@@ -206,10 +206,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
 
             @Override
-            public void onSuccess(Search search) {
-                Basic basic = search.getBasic().get(0);
-                String cid = basic.getCid();
-                String location = basic.getLocation();
+            public void onSuccess(GeoBean search) {
+                GeoBean.LocationBean basic = search.getLocationBean().get(0);
+                String cid = basic.getId();
+                String location = basic.getName();
                 if (first) {
                     ContentUtil.NOW_CITY_ID = cid;
                     ContentUtil.NOW_CITY_NAME = location;
@@ -235,17 +235,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void getNow(String location, final boolean nowCity) {
-        HeWeather.getSearch(this, location, "cn,overseas", 3, Lang.CHINESE_SIMPLIFIED, new HeWeather.OnResultSearchBeansListener() {
+        HeWeather.getGeoCityLookup(this, location, Mode.FUZZY, Range.WORLD, 3, Lang.ZH_HANS, new HeWeather.OnResultGeoListener() {
             @Override
             public void onError(Throwable throwable) {
 
             }
 
             @Override
-            public void onSuccess(Search search) {
-                Basic basic = search.getBasic().get(0);
-                String cid = basic.getCid();
-                String location = basic.getLocation();
+            public void onSuccess(GeoBean search) {
+                GeoBean.LocationBean basic = search.getLocationBean().get(0);
+                String cid = basic.getId();
+                String location = basic.getName();
                 if (nowCity) {
                     ContentUtil.NOW_CITY_ID = cid;
                     ContentUtil.NOW_CITY_NAME = location;
@@ -254,17 +254,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         cityIds.remove(1);
                     }
                 }
-                HeWeather.getWeatherNow(MainActivity.this, cid, new HeWeather.OnResultWeatherNowBeanListener() {
+                HeWeather.getWeatherNow(MainActivity.this, cid, new HeWeather.OnResultWeatherNowListener() {
                     @Override
                     public void onError(Throwable throwable) {
 
                     }
 
                     @Override
-                    public void onSuccess(Now list) {
-                        if (Code.OK.getCode().equalsIgnoreCase(list.getStatus())) {
-                            NowBase now = list.getNow();
-                            condCode = now.getCond_code();
+                    public void onSuccess(WeatherNowBean weatherNowBean) {
+                        if (Code.OK.getCode().equalsIgnoreCase(weatherNowBean.getCode())) {
+                            WeatherNowBean.NowBaseBean now = weatherNowBean.getNow();
+                            condCode = now.getIcon();
                             DateTime nowTime = DateTime.now();
                             int hourOfDay = nowTime.getHourOfDay();
                             if (hourOfDay > 6 && hourOfDay < 19) {
@@ -274,6 +274,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             }
                         }
                     }
+
                 });
             }
         });
@@ -390,9 +391,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         if (ContentUtil.CHANGE_LANG) {
             if (ContentUtil.SYS_LANG.equalsIgnoreCase("en")) {
-                changeLang(Lang.ENGLISH);
+                changeLang(Lang.EN);
             } else {
-                changeLang(Lang.CHINESE_SIMPLIFIED);
+                changeLang(Lang.ZH_HANS);
             }
             ContentUtil.CHANGE_LANG = false;
         }
@@ -431,21 +432,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void changeLang(final Lang lang) {
-        HeWeather.getSearch(this, ContentUtil.NOW_LON + "," + ContentUtil.NOW_LAT, "cn,overseas", 3, lang, new HeWeather.OnResultSearchBeansListener() {
+        HeWeather.getGeoCityLookup(this, ContentUtil.NOW_LON + "," + ContentUtil.NOW_LAT, Mode.FUZZY, Range.WORLD, 3, lang, new HeWeather.OnResultGeoListener() {
             @Override
             public void onError(Throwable throwable) {
             }
 
             @Override
-            public void onSuccess(Search search) {
-                Basic basic = search.getBasic().get(0);
-                String location = basic.getLocation();
+            public void onSuccess(GeoBean search) {
+                GeoBean.LocationBean basic = search.getLocationBean().get(0);
+                String location = basic.getName();
 
-                if (lang == Lang.ENGLISH) {
+                if (lang == Lang.EN) {
                     locaitonsEn.remove(0);
                     locaitonsEn.add(0, location);
                     tvLocation.setText(locaitonsEn.get(mNum));
-                }else if (lang == Lang.CHINESE_SIMPLIFIED){
+                } else if (lang == Lang.ZH_HANS) {
                     locaitons.remove(0);
                     locaitons.add(0, location);
                     tvLocation.setText(locaitons.get(mNum));

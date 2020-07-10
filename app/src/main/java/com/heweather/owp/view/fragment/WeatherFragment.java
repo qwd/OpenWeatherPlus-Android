@@ -43,17 +43,16 @@ import org.joda.time.DateTimeZone;
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.heweather.com.interfacesmodule.bean.air.forecast.AirForecast;
-import interfaces.heweather.com.interfacesmodule.bean.air.now.AirNow;
-import interfaces.heweather.com.interfacesmodule.bean.air.now.AirNowCity;
-import interfaces.heweather.com.interfacesmodule.bean.alarm.Alarm;
-import interfaces.heweather.com.interfacesmodule.bean.alarm.AlarmBase;
-import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.Forecast;
-import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.ForecastBase;
-import interfaces.heweather.com.interfacesmodule.bean.weather.hourly.Hourly;
-import interfaces.heweather.com.interfacesmodule.bean.weather.hourly.HourlyBase;
-import interfaces.heweather.com.interfacesmodule.bean.weather.now.Now;
-import interfaces.heweather.com.interfacesmodule.bean.weather.now.NowBase;
+import interfaces.heweather.com.interfacesmodule.bean.WarningBean;
+import interfaces.heweather.com.interfacesmodule.bean.air.AirNowBean;
+import interfaces.heweather.com.interfacesmodule.bean.base.Lang;
+import interfaces.heweather.com.interfacesmodule.bean.base.Mode;
+import interfaces.heweather.com.interfacesmodule.bean.base.Range;
+import interfaces.heweather.com.interfacesmodule.bean.geo.GeoBean;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherDailyBean;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherHourlyBean;
+import interfaces.heweather.com.interfacesmodule.bean.weather.WeatherNowBean;
+import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 
 public class WeatherFragment extends Fragment implements WeatherInterface {
     private static final String PARAM = "LOCATION";
@@ -95,7 +94,7 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
     private boolean isEn = false;
     private SunView sunView;
     private SunView moonView;
-    private String tz = "-8.0";
+    private String tz = "+8.0";
     private String currentTime;
     private String sunrise;
     private String sunset;
@@ -107,8 +106,8 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
     private View rootView;
     private String todayMaxTmp;
     private String todayMinTmp;
-    private Forecast weatherForecastBean;
-    private Hourly weatherHourlyBean;
+    private WeatherDailyBean weatherForecastBean;
+    private WeatherHourlyBean weatherHourlyBean;
     private String nowTmp;
     private String location;
     private String language;
@@ -151,7 +150,13 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
             location = getArguments().getString(PARAM);
             initObserver();
             initView(view);
+            Lang lang = Lang.ZH_HANS;
+            if (isEn) {
+                lang = Lang.EN;
+            }
+
             initData(location);
+
         }
     }
 
@@ -316,7 +321,7 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         weatherImpl.getWeatherHourly(location);
         weatherImpl.getAirForecast(location);
         weatherImpl.getAirNow(location);
-        weatherImpl.getAlarm(location);
+        weatherImpl.getWarning(location);
         weatherImpl.getWeatherForecast(location);
         weatherImpl.getWeatherNow(location);
     }
@@ -402,18 +407,18 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void getWeatherNow(Now bean) {
+    public void getWeatherNow(WeatherNowBean bean) {
         if (bean != null && bean.getNow() != null) {
-            NowBase now = bean.getNow();
-            String rain = now.getPcpn();
-            String hum = now.getHum();
-            String pres = now.getPres();
+            WeatherNowBean.NowBaseBean now = bean.getNow();
+            String rain = now.getPrecip();
+            String hum = now.getHumidity();
+            String pres = now.getPressure();
             String vis = now.getVis();
-            String windDir = now.getWind_dir();
-            String windSc = now.getWind_sc();
-            String condTxt = now.getCond_txt();
-            condCode = now.getCond_code();
-            nowTmp = now.getTmp();
+            String windDir = now.getWindDir();
+            String windSc = now.getWindScale();
+            String condTxt = now.getText();
+            condCode = now.getIcon();
+            nowTmp = now.getTemp();
             tvCond.setText(condTxt);
             tvTmp.setText(nowTmp + "°");
             if (ContentUtil.APP_SETTING_UNIT.equals("hua")) {
@@ -441,26 +446,26 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void getWeatherForecast(Forecast bean) {
-        if (bean != null && bean.getDaily_forecast() != null) {
+    public void getWeatherForecast(WeatherDailyBean bean) {
+        if (bean != null && bean.getDaily() != null) {
             weatherForecastBean = bean;
             DateTime now = DateTime.now(DateTimeZone.UTC);
-            tz = bean.getBasic().getTz();
+//            tz = bean.getBasic().getTz();
             float a = Float.valueOf(tz);
             float minute = a * 60;
             now = now.plusMinutes(((int) minute));
             currentTime = now.toString("HH:mm");
-            List<ForecastBase> daily_forecast = bean.getDaily_forecast();
+            List<WeatherDailyBean.DailyBean> daily_forecast = bean.getDaily();
 
-            ForecastBase forecastBase = daily_forecast.get(0);
-            String condCodeD = forecastBase.getCond_code_d();
-            String condCodeN = forecastBase.getCond_code_n();
-            String tmpMin = forecastBase.getTmp_min();
-            String tmpMax = forecastBase.getTmp_max();
-            sunrise = forecastBase.getSr();
-            sunset = forecastBase.getSs();
-            moonRise = forecastBase.getMr();
-            moonSet = forecastBase.getMs();
+            WeatherDailyBean.DailyBean forecastBase = daily_forecast.get(0);
+            String condCodeD = forecastBase.getIconDay();
+            String condCodeN = forecastBase.getIconNight();
+            String tmpMin = forecastBase.getTempMin();
+            String tmpMax = forecastBase.getTempMax();
+            sunrise = forecastBase.getSunrise();
+            sunset = forecastBase.getSunset();
+            moonRise = forecastBase.getMoonRise();
+            moonSet = forecastBase.getMoonSet();
             sunView.setTimes(sunrise, sunset, currentTime);
             moonView.setTimes(moonRise, moonSet, currentTime);
             todayMaxTmp = tmpMax;
@@ -485,10 +490,9 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void getAlarm(Alarm bean) {
-        if (bean != null && bean.getAlarm().size() > 0 && bean.getAlarm().get(0) != null) {
+    public void getWarning(WarningBean.WarningBeanBase alarmBase) {
+        if (alarmBase != null) {
             tvAlarm.setVisibility(View.VISIBLE);
-            AlarmBase alarmBase = bean.getAlarm().get(0);
             String level = alarmBase.getLevel();
             String type = alarmBase.getType();
             if (ContentUtil.SYS_LANG.equals("en")) {
@@ -531,16 +535,16 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
     }
 
     @Override
-    public void getAirNow(AirNow bean) {
-        if (bean != null && bean.getAir_now_city() != null) {
+    public void getAirNow(AirNowBean bean) {
+        if (bean != null && bean.getNow() != null) {
             ivLine.setVisibility(View.VISIBLE);
             gridAir.setVisibility(View.VISIBLE);
             rvAir.setVisibility(View.VISIBLE);
             tvAirTitle.setVisibility(View.VISIBLE);
-            AirNowCity airNowCity = bean.getAir_now_city();
-            String qlty = airNowCity.getQlty();
+            AirNowBean.NowBean airNowCity = bean.getNow();
+            String qlty = airNowCity.getCategory();
             String aqi = airNowCity.getAqi();
-            String pm25 = airNowCity.getPm25();
+            String pm25 = airNowCity.getPm2p5();
             String pm10 = airNowCity.getPm10();
             String so2 = airNowCity.getSo2();
             String no2 = airNowCity.getNo2();
@@ -584,50 +588,46 @@ public class WeatherFragment extends Fragment implements WeatherInterface {
         }
     }
 
-    @Override
-    public void getAirForecast(AirForecast bean) {
-
-    }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void getWeatherHourly(Hourly bean) {
+    public void getWeatherHourly(WeatherHourlyBean bean) {
         if (bean != null && bean.getHourly() != null) {
             weatherHourlyBean = bean;
-            List<HourlyBase> hourlyWeatherList = bean.getHourly();
-            List<HourlyBase> data = new ArrayList<>();
+            List<WeatherHourlyBean.HourlyBean> hourlyWeatherList = bean.getHourly();
+            List<WeatherHourlyBean.HourlyBean> data = new ArrayList<>();
             if (hourlyWeatherList.size() > 23) {
                 for (int i = 0; i < 24; i++) {
                     data.add(hourlyWeatherList.get(i));
-                    String condCode = data.get(i).getCond_code();
-                    String time = data.get(i).getTime();
-                    time = time.substring(time.length() - 5, time.length() - 3);
+                    String condCode = data.get(i).getIcon();
+                    String time = data.get(i).getFxTime();
+                    time = time.substring(time.length() - 11, time.length() - 9);
                     int hourNow = Integer.parseInt(time);
                     if (hourNow >= 6 && hourNow <= 19) {
-                        data.get(i).setCond_code(condCode + "d");
+                        data.get(i).setIcon(condCode + "d");
                     } else {
-                        data.get(i).setCond_code(condCode + "n");
+                        data.get(i).setIcon(condCode + "n");
                     }
                 }
             } else {
                 for (int i = 0; i < hourlyWeatherList.size(); i++) {
                     data.add(hourlyWeatherList.get(i));
-                    String condCode = data.get(i).getCond_code();
-                    String time = data.get(i).getTime();
-                    time = time.substring(time.length() - 5, time.length() - 3);
+                    String condCode = data.get(i).getIcon();
+                    String time = data.get(i).getFxTime();
+                    time = time.substring(time.length() - 11, time.length() - 9);
                     int hourNow = Integer.parseInt(time);
                     if (hourNow >= 6 && hourNow <= 19) {
-                        data.get(i).setCond_code(condCode + "d");
+                        data.get(i).setIcon(condCode + "d");
                     } else {
-                        data.get(i).setCond_code(condCode + "n");
+                        data.get(i).setIcon(condCode + "n");
                     }
                 }
             }
 
-            int minTmp = Integer.parseInt(data.get(0).getTmp());
+            int minTmp = Integer.parseInt(data.get(0).getTemp());
             int maxTmp = minTmp;
             for (int i = 0; i < data.size(); i++) {
-                int tmp = Integer.parseInt(data.get(i).getTmp());
+                int tmp = Integer.parseInt(data.get(i).getTemp());
                 minTmp = Math.min(tmp, minTmp);
                 maxTmp = Math.max(tmp, maxTmp);
             }

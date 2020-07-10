@@ -128,7 +128,7 @@
                                 android:textSize="16sp" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="98dp"
                                 android:layout_marginLeft="50dp"
                                 android:orientation="horizontal">
